@@ -22,6 +22,7 @@
           </a>
           <nav class="main-nav" aria-label="Navegación principal">
               <a href="product/list.html" th:href="@{/product/list}">Productos</a>
+              <a href="customer/list.html" th:href="@{/customer/list}">Clientes</a>
           </nav>
       </div>
   </header>
@@ -43,9 +44,9 @@
         </div>
 
         <article class="grid-row customer-grid" th:each="customer : ${customers}">
-          <strong>Cliente</strong>
-          <a>cliente@example.com</a>
-          <span>13 ene 2011</span>
+          <strong th:text="${customer.name}">Cliente</strong>
+          <a th:text="${customer.email}" th:href="'mailto:'+${customer.email}">cliente@example.com</a>
+          <span th:text="${#calendars.format(customer.customerSince, 'dd ''de'' YYYY')}">13 ene 2011</span>
           <span>
             
           </span>

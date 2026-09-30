@@ -11,6 +11,27 @@
       <link rel="icon" type="image/x-icon" href="/images/happyPackLogo.ico"/>
   </head>
 
+
+  <div th:fragment="header" class="site-header__inner">
+      <a class="brand" href="home.html" th:href="@{/}">
+          <img src="../static/images/happyPackLogo.png" alt="Happy Pack" th:src="@{/images/happyPackLogo.png}" />
+          <span class="brand__text">
+        <span class="brand__name">Happy Pack</span>
+        <span class="brand__tagline">Regalos útiles para cada ocasión</span>
+      </span>
+      </a>
+      <nav class="main-nav" aria-label="Navegación principal">
+          <a href="product/list.html" th:href="@{/product/list}">Productos</a>
+          <a href="customer/list.html" th:href="@{/customer/list}">Clientes</a>
+      </nav>
+  </div>
+
+  <footer class="site-footer" th:fragment="footer">
+      <div class="site-footer__inner">
+          <span>&copy; 2025 Happy Pack</span>
+      </div>
+  </footer>
+
   </body>
 
 </html>

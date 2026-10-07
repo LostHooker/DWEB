@@ -254,66 +254,56 @@
     <section class="products-grid">
         <article class="product-card" th:each="prod, iterStat : ${prods}">
 
-            <!-- EJERCICIO 6.3 -->
+            <!-- EJERCICIO 5.5 -->
             <div class="price-band"
-                 th:class="'price-band price-band--cheap'"
-                 th:if="${prod.price < 2}"></div>
-            <div class="price-band"
-                 th:class="'price-band price-band--medium'"
-                 th:if="${prod.price >= 2 and prod.price <= 5}"></div>
-            <div class="price-band"
-                 th:class="'price-band price-band--expensive'"
-                 th:if="${prod.price > 5}"></div>
+                 th:class="${prod.price < 2 ? 'price-band price-band--cheap' : (prod.price <= 5 ? 'price-band price-band--medium' : 'price-band price-band--expensive')}"></div>
 
             <div class="product-card__content">
                 <!-- Nombre del producto -->
                 <header>
                     <h2 class="product-name" th:text="${prod.name}">Nombre del producto</h2>
+                    <!-- EJERCICIO 5.2 -->
+                    <span class="product-name-type"
+                          th:text="${#strings.length(prod.name) > 20 ? 'Nombre largo' : 'Nombre corto'}">Longitud del nombre</span>
                 </header>
 
                 <!-- Precio -->
                 <div class="product-price">
                     <span th:text="${#numbers.formatDecimal(prod.price, 1, 2)} + ' €'">2,50 €</span>
 
-                    <!-- EJERCICIO 6.1 -->
+                    <!-- EJERCICIO 5.1 -->
                     <span class="price-type"
-                          th:if="${prod.price.stripTrailingZeros().scale() <= 0}">Precio exacto</span>
-                    <span class="price-type"
-                          th:if="${prod.price.stripTrailingZeros().scale() > 0}">Con céntimos</span>
+                          th:text="${prod.price.stripTrailingZeros().scale() <= 0 ? 'Precio exacto' : 'Con céntimos'}">Tipo de precio</span>
                 </div>
 
                 <!-- Cálculos -->
                 <section class="product-calculations">
                     <div class="calculation">
-                        <span class="calculation__label">Precio / ID</span>
+                        <span class="calculation__label">Caja de 6</span>
+                        <!-- EJERCICIO 5.3 -->
+                        <span class="calculation__value"
+                              th:text="${#numbers.formatDecimal(prod.price * 6, 1, 2)} + ' €'">-- €</span>
+                    </div>
 
-                        <!-- EJERCICIO 6.2 -->
+                    <div class="calculation">
+                        <span class="calculation__label">Precio / ID</span>
+                        <!-- EJERCICIO 5.4 -->
                         <span class="calculation__value"
-                              th:if="${prod.price > prod.id}">Precio superior</span>
-                        <span class="calculation__value"
-                              th:if="${prod.price <= prod.id}">Precio igual o inferior</span>
+                              th:text="${prod.price > prod.id ? 'Precio superior' : 'Precio igual o inferior'}">Resultado</span>
                     </div>
                 </section>
 
                 <!-- Comentarios -->
                 <section class="comments-box">
                     <div class="comments-box__header">
-                        <!-- EJERCICIO 6.5 -->
+                        <!-- EJERCICIO 5.7 -->
                         <img class="comments-box__icon"
-                             th:if="${not #lists.isEmpty(prod.comments)}"
-                             th:src="'https://www.svgrepo.com/show/501516/comments-on.svg'"
+                             th:src="${#lists.isEmpty(prod.comments) ? 'https://www.svgrepo.com/show/501515/comments-off.svg' : 'https://www.svgrepo.com/show/501516/comments-on.svg'}"
                              alt="Comentarios">
-                        <img class="comments-box__icon"
-                             th:if="${#lists.isEmpty(prod.comments)}"
-                             th:src="'https://www.svgrepo.com/show/501515/comments-off.svg'"
-                             alt="Sin comentarios">
 
-                        <!-- EJERCICIO 6.4 -->
-                        <span class="comments-box__status" th:switch="${prod.comments.size()}">
-                            <span th:case="0">Sin comentarios</span>
-                            <span th:case="1">Un comentario</span>
-                            <span th:case="*">Varios comentarios</span>
-                        </span>
+                        <!-- EJERCICIO 5.6 -->
+                        <span class="comments-box__status"
+                              th:text="${#lists.isEmpty(prod.comments) ? 'Sin comentarios' : (prod.comments.size() == 1 ? 'Un comentario' : 'Varios comentarios')}">Número de comentarios</span>
 
                     </div>
                 </section>
@@ -321,15 +311,13 @@
                 <!-- Pie de la tarjeta -->
                 <footer class="product-card__footer">
 
-                    <!-- EJERCICIO 6.6 -->
-                    <span class="position" th:if="${iterStat.count % 2 == 0}">Posición par</span>
-                    <span class="position" th:if="${iterStat.count % 2 != 0}">Posición impar</span>
+                    <!-- EJERCICIO 5.8 -->
+                    <span class="position"
+                          th:text="${iterStat.count % 2 == 0 ? 'Posición par' : 'Posición impar'}">Posición</span>
 
-                    <!-- EJERCICIO 6.7 -->
-                    <span class="recommendation--yes"
-                          th:if="${prod.inStock && prod.price <= 5}">Recomendado</span>
-                    <span class="recommendation--no"
-                          th:if="${not prod.inStock || prod.price > 5}">No recomendado</span>
+                    <!-- EJERCICIO 5.9 -->
+                    <span th:class="${prod.inStock and prod.price <= 5 ? 'recommendation--yes' : 'recommendation--no'}"
+                          th:text="${prod.inStock and prod.price <= 5 ? 'Recomendado' : 'No recomendado'}">Recomendado</span>
                 </footer>
             </div>
         </article>

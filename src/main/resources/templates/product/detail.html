@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: siteHead}"></head>
+
+<body>
+
+<header class="site-header">
+    <div class="site-header__inner">
+        <a class="brand" href="/" th:href="@{/}">
+            <img src="../static/images/happyPackLogo.png"
+                 alt="Happy Pack"
+                 th:src="@{/images/happyPackLogo.png}" />
+            <span class="brand__text">
+                <span class="brand__name">Happy Pack</span>
+                <span class="brand__tagline">
+                    Regalos útiles para cada ocasión
+                </span>
+            </span>
+        </a>
+
+        <nav class="main-nav" aria-label="Navegación principal">
+            <a href="list.html" th:href="@{/product/list}">
+                Productos
+            </a>
+        </nav>
+    </div>
+</header>
+
+<main class="page">
+
+    <div class="page-header">
+        <p class="eyebrow">Catálogo / Detalle de producto</p>
+        <h1 th:text="${prod.name}">
+            Bolsa de tela reutilizable
+        </h1>
+        <p class="lead">
+            Información detallada del producto seleccionado.
+        </p>
+    </div>
+
+    <style>
+        .product-detail {
+            max-width: 900px;
+            margin: 2rem auto;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 1rem;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #e2e8ed;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #566972;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+        }
+
+        .detail-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #005088;
+        }
+
+        .detail-comments {
+            margin-top: 2rem;
+        }
+
+        .detail-comments h2 {
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .detail-row {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
+        }
+    </style>
+
+    <section class="data-grid product-detail"
+             aria-label="Detalle del producto">
+
+        <div class="detail-row">
+            <span class="detail-label">Identificador</span>
+            <span class="detail-value"
+                  th:text="${prod.id}">1</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Nombre</span>
+            <strong class="detail-value"
+                    th:text="${prod.name}">
+                Bolsa de tela reutilizable
+            </strong>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Precio</span>
+            <span class="detail-price"
+                  th:text="${#numbers.formatDecimal(prod.price, 1, 2)} + ' €'">
+                2,50 €
+            </span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Disponibilidad</span>
+            <span class="badge"
+                  th:class="${prod.inStock} ? 'badge' : 'badge badge--danger'"
+                  th:text="${prod.inStock} ? 'En stock' : 'Sin stock'">
+                En stock
+            </span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Comentarios</span>
+            <span class="detail-value"
+                  th:text="${#lists.size(prod.comments)} + ' comentario/s'">
+                2 comentario/s
+            </span>
+        </div>
+
+    </section>
+
+    <section class="detail-comments">
+        <h2>Opiniones de clientes</h2>
+
+        <p th:if="${#lists.isEmpty(prod.comments)}">
+            Este producto todavía no tiene comentarios.
+        </p>
+
+        <div class="data-grid"
+             th:if="${!#lists.isEmpty(prod.comments)}">
+
+            <article class="grid-row comment-grid"
+                     th:each="comment : ${prod.comments}">
+
+                <span th:text="${comment.text}">
+                    Comentario del cliente
+                </span>
+
+            </article>
+        </div>
+    </section>
+
+    <nav class="actions">
+        <a class="button button--secondary"
+           href="list.html"
+           th:href="@{/product/list}">
+            ← Volver a productos
+        </a>
+    </nav>
+
+</main>
+
+<footer class="site-footer">
+    <div class="site-footer__inner">
+        <span>&copy; 2026 Happy Pack</span>
+    </div>
+</footer>
+
+</body>
+</html>

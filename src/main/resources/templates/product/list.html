@@ -28,10 +28,36 @@
         <p class="lead">Listado de artículos promocionales con precio, disponibilidad y comentarios de clientes.</p>
       </div>
 
+        <form th:action="@{/product/search}" method="get">
+            <label for="maxPrice">Precio máximo:</label>
+            <input id="maxPrice"
+                   type="number"
+                   name="maxPrice"
+                   step="0.01"
+                   min="0"
+                   th:value="${maxPrice}">
+            <label for="inStock">Disponibilidad:</label>
+<!--            Filtro-->
+            <select id="inStock" name="inStock">
+                <option value="" th:selected="${inStock == null}">Todos</option>
+                <option value="true" th:selected="${inStock == true}">Disponible</option>
+                <option value="false" th:selected="${inStock == false}">Agotado</option>
+            </select>
+            <input type="hidden"
+                   name="order"
+                   th:value="${order}"
+                   th:if="${order != null}">
+            <button type="submit">Filtrar</button>
+        </form>
+
       <section class="data-grid" aria-label="Lista de productos">
         <div class="grid-row grid-row--head product-grid">
             <span>Nº</span>
-            <span>Nombre</span>
+<!--           Flechas -->
+            <span>Ordenar
+                <a th:href="@{/product/search(maxPrice=${maxPrice},inStock=${inStock},order='asc')}"title="Ordenar A-Z">↑</a>
+                <a th:href="@{/product/search(maxPrice=${maxPrice},inStock=${inStock},order='desc')}"title="Ordenar Z-A">↓</a>
+            </span>
           <span class="number">Precio</span>
             <span>Stock</span>
             <span>Descuento</span>
@@ -50,10 +76,15 @@
                 <span th:text="${#lists.size(prod.comments)}">2</span> comentario/s
                 <a class="button button--secondary"
                    href="comments.html"
-                   th:href="@{/product/comments(prodId=${prod.id})}"
+                   th:href="@{/product/{prodId}/comments(prodId=${prod.id})}"
                    th:if="${!#lists.isEmpty(prod.comments)}">Ver</a>
+<!--               Segundo Boton-->
+                <a class="button button--secondary"
+                   href="detail.html"
+                   th:href="@{/product/{prodId}(prodId=${prod.id})}">Ver detalle</a>
                 </span>
             </div>
+
         </article>
       </section>
     </main>
